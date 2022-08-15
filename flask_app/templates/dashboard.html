@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static',filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="container">
+        <div class="d-flex justify-content-between py-3">
+          <h1>Welcome {{user.first_name}}</h1>
+          <div>
+            <a href="/logout" class="btn btn-outline-info">Logout</a>
+          </div>
+        </div>
+
+        <div class="row">
+          <form
+            action="/activities/create"
+            method="post"
+            class="col-12 col-md-5 p-4 box text-light"
+          >
+            {% with messages = get_flashed_messages(category_filter=['error'])
+            %} {% if messages %}
+            <div class="alert alert-danger" role="alert">
+              <strong>Flash Validations!</strong>
+              {% for message in messages %}
+              <ul>
+                <li>{{message}}</li>
+              </ul>
+              {% endfor %}
+            </div>
+            {% endif %} {% endwith %}
+            <h2 class="text">Add Activity Details</h2>
+            <input type="hidden" name="user_id" value="{{user.id}}" />
+            <div class="form-group py-3">
+              <input
+                type="text"
+                name="name"
+                class="form-control"
+                placeholder="Name"
+              />
+            </div>
+            <div class="form-group pb-3">
+              <input
+                type="text"
+                name="priority"
+                class="form-control"
+                placeholder="Priority"
+              />
+            </div>
+            <div class="form-group pb-3">
+              <input
+                type="text"
+                name="status"
+                class="form-control"
+                placeholder="Status"
+              />
+            </div>
+            <div class="form-group pb-3">
+              <input type="date" name="date" class="form-control" required />
+            </div>
+            <div class="form-group pb-3">
+              <input
+                type="text"
+                name="time_est"
+                class="form-control"
+                placeholder="Time Estimation"
+              />
+            </div>
+            <div class="d-flex justify-content-end">
+              <input type="submit" value="Add Activity" class="btn button" />
+            </div>
+          </form>
+          <div class="col-12 col-md-7 pl-md-5 pl-1 pt-md-0 pt-2">
+            <div class="">
+              <h2 class="activities-title text-center mb-4">All Activities</h2>
+              {% for activity in activities %}
+              <div class="d-flex justify-content-between">
+                <h3>
+                  <a
+                    href="/activities/{{activity.id}}"
+                    class="mr-2 text-warning"
+                    >{{activity.name}}</a
+                  >
+                </h3>
+                <div class="d-flex pt-2">
+                  {% if session.user_id in activity.user_ids_who_favorited %}
+                  <form
+                    action="/activities/{{activity.id}}/unfavorite"
+                    method="post"
+                  >
+                    <input type="hidden" name="id" value="{{activity.id}}" />
+                    <input
+                      type="hidden"
+                      name="user_id"
+                      value="{{session.user_id}}"
+                    />
+                    <button class="btn btn-sm auth-button" type="submit">
+                      unfavorite
+                    </button>
+                  </form>
+                  {% else %}
+                  <form
+                    action="/activities/{{activity.id}}/favorite"
+                    method="post"
+                  >
+                    <input type="hidden" name="id" value="{{activity.id}}" />
+                    <input
+                      type="hidden"
+                      name="user_id"
+                      value="{{session.user_id}}"
+                    />
+                    <button class="btn btn-sm auth-button" type="submit">
+                      favorite
+                    </button>
+                  </form>
+                  {% endif %}
+                </div>
+              </div>
+
+              <p>
+                Added by
+                {{activity.creator.first_name}}{{activity.creator.last_name}}
+              </p>
+
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div></div>
+    </div>
+  </body>
+</html>

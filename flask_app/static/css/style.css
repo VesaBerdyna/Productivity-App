@@ -1,0 +1,42 @@
+h2,
+h1,
+h3 {
+  color: #60c4a7;
+}
+
+.auth-button {
+  background-color: #60c4a7;
+  color: white;
+}
+
+.create {
+  color: white;
+}
+
+.button {
+  background-color: #ffa500d9;
+  color: white;
+}
+
+.box {
+  border: 3px solid;
+  border-color: #656b73;
+  border-radius: 25px;
+}
+
+.table {
+  background: #d8fff485;
+}
+
+.box p {
+  color: black;
+}
+
+.text {
+  color: #ffa500d9;
+}
+
+.activities-title {
+  color: #63605e;
+  border-bottom: 1px solid;
+}

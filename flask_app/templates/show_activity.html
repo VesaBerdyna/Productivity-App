@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Show Activity</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static',filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="box p-4">
+        <div class="d-flex justify-content-between py-3">
+          <h1>{{activity.name}}</h1>
+          <div>
+            <a href="/dashboard" class="btn button">Add activity</a>
+            <a href="/logout" class="btn button">Logout</a>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-12">
+            <p>
+              <span class="text-warning">Priority: </span> {{activity.priority}}
+            </p>
+            <p><span class="text-warning">Status:</span> {{activity.status}}</p>
+            <p>
+              <span class="text-warning">Date:</span>
+              {{activity.date.strftime('%Y-%m-%d')}}
+            </p>
+            <p>
+              <span class="text-warning">Time Est:</span> {{activity.time_est}}
+            </p>
+            <p>Added by {{activity.creator.first_name}}</p>
+
+            {% if activity.user_id == user.id %}
+            <div class="d-flex">
+              <a
+                href="/activities/{{activity.id}}/edit"
+                class="btn btn-outline-success mr-2"
+                >Edit</a
+              >
+              <form action="/activities/{{activity.id}}/delete" method="post">
+                <input type="hidden" name="id" value="{{activity.id}}" />
+                <button class="btn btn-outline-danger" type="submit">
+                  Delete
+                </button>
+              </form>
+            </div>
+            {% endif %}
+          </div>
+          <div class="col-md-6 col-12">
+            <h2 class="activities-title">Your favorites activities list</h2>
+            {% for favorites in favoritedActivities %}
+            <h3 class="text-bold">{{favorites.name}}</h3>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
